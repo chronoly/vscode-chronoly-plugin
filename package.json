@@ -1,0 +1,69 @@
+{
+  "name": "chronoly",
+  "displayName": "chronoly",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chronoly/vscode-chronoly-plugin"
+  },
+  "version": "1.0.8",
+  "publisher": "chronoly",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onUri"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "chronoly.login",
+        "title": "Chronoly: Log in"
+      },
+      {
+        "command": "chronoly.logout",
+        "title": "Chronoly: Log out"
+      },
+      {
+        "command": "chronoly.setapikey",
+        "title": "Chronoly: Set API key"
+      },
+      {
+        "command": "chronoly.dashboard",
+        "title": "Chronoly: Open dashboard"
+      }
+    ]
+  },
+  "scripts": {
+    "clean": "rimraf ./dist ./out",
+    "package": "npm run clean && vsce package",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "format-check": "prettier --check \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/vscode": "^1.73.0",
+    "@types/ws": "^8.5.4",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "3.0.2",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^2.21.0",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "ws": "^8.13.0"
+  }
+}
