@@ -36,10 +36,15 @@ export class CodelensProvider implements vscode.CodeLensProvider {
       const text = document.getText();
 
       // Count the number of class declarations
-      const classRegex = /export\s+class\s+\w+/g;
+      const classRegex = /export\s+default\s+class\s+\w+/g;
       const classMatches = text.match(classRegex);
-      if (!classMatches || classMatches.length !== 1) {
-        // Only proceed if there is exactly one class declaration
+
+      // Count the number of default function declarations
+      const functionRegex = /export\s+default\s+function\s+\w+/g;
+      const functionMatches = text.match(functionRegex);
+
+      if ((!classMatches || classMatches.length !== 1) && (!functionMatches || functionMatches.length !== 1)) {
+        // Only proceed if there is exactly one class or one default function declaration
         return [];
       }
 
@@ -47,8 +52,8 @@ export class CodelensProvider implements vscode.CodeLensProvider {
       while ((matches = regex.exec(text)) !== null) {
         const line = document.lineAt(document.positionAt(matches.index).line);
 
-        // Check if the match is for the export class declaration
-        if (matches[0].startsWith("export class")) {
+        // Check if the match is for the export class or export default function declaration
+        if (matches[0].startsWith("export default class") || matches[0].startsWith("export default function")) {
           const range = new vscode.Range(line.lineNumber, 0, line.lineNumber, line.text.length);
           this.codeLenses.push(new vscode.CodeLens(range));
         }

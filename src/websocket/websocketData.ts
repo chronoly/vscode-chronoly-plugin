@@ -25,6 +25,7 @@ export class WebsocketData {
         return;
       }
 
+      // doesn't work if the this.hash function is called
       const hash = createHash("sha256");
       hash.update(document?.fileName);
       const out = hash.digest("hex");
