@@ -1,6 +1,6 @@
 import * as WebSocket from "ws";
-import { auth, contextProvider, log, statusBarManager } from "../extension";
-import statHandler from "./handlers/statHandler";
+import { auth, contextProvider, log, statusBarManager, websocketData } from "../extension";
+import parseTime from "./handlers/statHandler";
 
 export class WebSocketClient {
   private websocket?: WebSocket;
@@ -28,7 +28,7 @@ export class WebSocketClient {
       this.websocket?.send(
         JSON.stringify({
           event: "identify",
-          data: { apiToken: auth.getApiKey() },
+          data: { apiToken: auth.getApiKey() }
         })
       );
     });
@@ -67,10 +67,7 @@ export class WebSocketClient {
     }
 
     // Use exponential backoff with a base of 2 seconds and cap it at 60 seconds.
-    const delay = Math.min(
-      60 * 1000,
-      Math.pow(2, this.reconnectAttempt) * 1000
-    );
+    const delay = Math.min(60 * 1000, Math.pow(2, this.reconnectAttempt) * 1000);
 
     // TODO: Dispose of this timeout when the extension is deactivated.
     this.reconnectTimeout = setTimeout(async () => {
@@ -92,10 +89,14 @@ export class WebSocketClient {
           log("Heartbeat:" + parsedData.message);
           break;
         case "stat":
-          statHandler(parsedData.data);
+          parseTime(parsedData.data.totalTime);
+          break;
+        case "total-time":
+          websocketData.handleInput(data);
           break;
         case "identified":
           statusBarManager.sendStatInfo();
+          websocketData.sendFileInfo();
           break;
         default:
           console.warn("Unhandled message type:", parsedData.type);
@@ -119,7 +120,7 @@ export class WebSocketClient {
    */
   public send(data: WebSocket.Data) {
     if (this.isConnected()) {
-      log(`Sending data: ${data}`);
+      // log(`Sending data: ${data}`);
       this.websocket?.send(data);
     }
   }

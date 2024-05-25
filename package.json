@@ -22,6 +22,16 @@
   "contributes": {
     "commands": [
       {
+        "title": "Enable CodeLens",
+        "command": "chronoly.enableCodeLens",
+        "category": "Chronoly: Enable CodeLense"
+      },
+      {
+        "title": "Disable Codelens",
+        "command": "chronoly.disableCodeLens",
+        "category": "Chronoly: Disable CodeLens"
+      },
+      {
         "command": "chronoly.login",
         "title": "Chronoly: Log in"
       },
@@ -64,6 +74,7 @@
     "@vscode/vsce": "^2.21.0",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
+    "prettier-eslint": "^16.3.0",
     "ws": "^8.13.0"
   }
 }

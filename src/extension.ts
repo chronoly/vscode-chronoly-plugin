@@ -7,9 +7,11 @@ import StatusBarManager from "./StatusBarManager";
 import handleURI from "./auth/authCallback";
 import { showApiKeyWindow } from "./auth/interface/setApiKeyWindow";
 import ContextProvider from "./contextProvider";
+import { CodelensProvider } from "./lens";
 import { Listener } from "./listeners/listeners";
 import { HttpClient } from "./utils/AxiosClient";
 import { WebSocketClient } from "./websocket/websocket";
+import { WebsocketData } from "./websocket/websocketData";
 
 const outputChannel = window.createOutputChannel("Chronoly");
 
@@ -17,8 +19,10 @@ export let listener: Listener = new Listener();
 export let statusBarManager: StatusBarManager;
 export let auth: Auth;
 export let websocket: WebSocketClient;
+export let websocketData: WebsocketData;
 export let contextProvider: ContextProvider;
 export let httpClient: HttpClient;
+export let codelensProvider: CodelensProvider;
 
 export function activate(_context: ExtensionContext) {
   contextProvider = new ContextProvider(_context);
@@ -26,6 +30,7 @@ export function activate(_context: ExtensionContext) {
   auth = new Auth(_context);
   statusBarManager = new StatusBarManager(_context);
   websocket = new WebSocketClient();
+  websocketData = new WebsocketData(_context);
 
   listener.subscribe(_context);
 
@@ -40,18 +45,26 @@ export function activate(_context: ExtensionContext) {
   _context.subscriptions.push(
     vscode.commands.registerCommand("chronoly.login", () => auth.login()),
     vscode.commands.registerCommand("chronoly.logout", () => auth.logout()),
-    vscode.commands.registerCommand("chronoly.setapikey", () =>
-      showApiKeyWindow()
-    ),
-    vscode.commands.registerCommand("chronoly.menu", () =>
-      statusBarManager.menu(_context)
-    ),
+    vscode.commands.registerCommand("chronoly.setapikey", () => showApiKeyWindow()),
+    vscode.commands.registerCommand("chronoly.menu", () => statusBarManager.menu(_context)),
     vscode.window.registerUriHandler({
       handleUri(uri: vscode.Uri): vscode.ProviderResult<void> {
         handleURI(uri);
-      },
+      }
     })
   );
+
+  codelensProvider = new CodelensProvider();
+
+  vscode.languages.registerCodeLensProvider("*", codelensProvider);
+
+  vscode.commands.registerCommand("chronoly.enableCodeLens", () => {
+    vscode.workspace.getConfiguration("chronoly").update("enableCodeLens", true, true);
+  });
+
+  vscode.commands.registerCommand("chronoly.disableCodeLens", () => {
+    vscode.workspace.getConfiguration("chronoly").update("enableCodeLens", false, true);
+  });
 
   log(`Finished loading plugin.`);
 }

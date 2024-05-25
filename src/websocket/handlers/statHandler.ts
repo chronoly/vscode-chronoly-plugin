@@ -1,7 +1,7 @@
 export var timeString: String | null = null;
 
-export default function statHandler(json: any) {
-  const timeInMs = Number(json.totalTime);
+export function parseTime(totalTime: number) {
+  const timeInMs = totalTime;
 
   // convert to hours, minutes and seconds
   const hours = Math.floor(timeInMs / 3600000);
@@ -13,9 +13,17 @@ export default function statHandler(json: any) {
   const minutesString = minutes > 0 ? `${minutes}m` : "0m";
   // const secondsString = seconds < 10 ? `0${seconds}` : seconds;
 
+  let output = "";
+
   if (hours <= 0 && minutes <= 0) {
-    timeString = `${seconds}s`;
+    output = `${seconds}s`;
   } else {
-    timeString = `${hoursString}${minutesString}`;
+    output = `${hoursString}${minutesString}`;
   }
+
+  return output;
+}
+
+export default function statHandler(totalTime: any) {
+  timeString = parseTime(totalTime);
 }
