@@ -65,13 +65,13 @@
     "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
+    "@vscode/vsce": "^3.0.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "3.0.2",
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "@vscode/vsce": "^2.21.0",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "prettier-eslint": "^16.3.0",
