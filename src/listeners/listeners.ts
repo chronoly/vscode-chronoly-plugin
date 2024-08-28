@@ -35,13 +35,15 @@ export class Listener {
   }
 
   public getChangedFile(document: vscode.TextDocument) {
-    const fileName = document.fileName;
+    // const fileName = document.fileName;
 
-    if (!this.changedDocuments[fileName]) {
-      this.changedDocuments[fileName] = new DocumentChangeData(document);
-    }
+    // if (!this.changedDocuments[fileName]) {
+    //   this.changedDocuments[fileName] = new DocumentChangeData(document);
+    // }
 
-    return this.changedDocuments[fileName];
+    // return this.changedDocuments[fileName];
+
+    return new DocumentChangeData(document);
   }
 
   public clear() {
@@ -67,7 +69,8 @@ export function isTrueEventFile(
   const isDocumentScheme =
     scheme === "file" || scheme === "untitled" || scheme.includes("vscode-");
 
-  const isLiveshareTemporaryFile = /.*\.code-workspace.*vsliveshare.*tmp-.*/.test(fileName);
+  const isLiveshareTemporaryFile =
+    /.*\.code-workspace.*vsliveshare.*tmp-.*/.test(fileName);
 
   if (!isDocumentScheme || isLiveshareTemporaryFile) {
     return false;
@@ -75,4 +78,3 @@ export function isTrueEventFile(
 
   return true;
 }
-

@@ -14,7 +14,7 @@ export class WebsocketData {
     context.subscriptions.push({
       dispose: () => {
         clearInterval(statInfoInterval);
-      }
+      },
     });
   }
 
@@ -31,22 +31,25 @@ export class WebsocketData {
       const out = hash.digest("hex");
 
       const fileName = document.fileName;
-      const projectPath = workspace.getWorkspaceFolder(document.uri)?.uri.path || document.fileName.split(fileName)[0];
+      const projectPath =
+        workspace.getWorkspaceFolder(document.uri)?.uri.path ||
+        document.fileName.split(fileName)[0];
 
-      websocket.send(
-        JSON.stringify({
-          event: "total-time",
-          data: {
-            filter: {
-              fileId: fileName,
-              projectId: projectPath
-            },
-            startTime: 0,
-            endTime: Date.now(),
-            identifier: out
-          }
-        })
-      );
+      // disabled for now...
+      // websocket.send(
+      //   JSON.stringify({
+      //     event: "total-time",
+      //     data: {
+      //       filter: {
+      //         fileId: fileName,
+      //         projectId: projectPath
+      //       },
+      //       startTime: 0,
+      //       endTime: Date.now(),
+      //       identifier: out
+      //     }
+      //   })
+      // );
 
       this.fileCacheTime.set(this.hash(document.fileName), -1);
     }

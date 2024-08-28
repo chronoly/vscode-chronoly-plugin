@@ -25,5 +25,7 @@ export function parseTime(totalTime: number) {
 }
 
 export default function statHandler(totalTime: any) {
-  timeString = parseTime(totalTime);
+  timeString = parseTime(
+    totalTime.totalTime - Math.max(totalTime.end - Date.now(), 0)
+  );
 }

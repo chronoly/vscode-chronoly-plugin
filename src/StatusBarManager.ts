@@ -22,12 +22,9 @@ export default class StatusBarManager {
       this.refresh(context);
     }, 1000);
 
-    const statInfoInterval = setInterval(this.sendStatInfo, 1 * 1000);
-
     context.subscriptions.push({
       dispose: () => {
         clearInterval(refreshInterval);
-        clearInterval(statInfoInterval);
       },
     });
   }
@@ -36,10 +33,14 @@ export default class StatusBarManager {
     if (websocket?.isConnected()) {
       websocket.send(
         JSON.stringify({
-          event: "stat",
+          event: "subscribe",
           data: {
-            startTime: new Date().setHours(0, 0, 0, 0),
-            endTime: Date.now(),
+            event: "total-time",
+            data: {
+              startTime: new Date().setHours(0, 0, 0, 0),
+              endTime: Date.now(),
+              timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            },
           },
         })
       );
