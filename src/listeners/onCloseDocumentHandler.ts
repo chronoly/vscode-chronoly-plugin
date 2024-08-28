@@ -15,8 +15,6 @@ export function onCloseDocumentHandler(document: vscode.TextDocument) {
 
   const documentChangeData = listener.getChangedFile(document);
 
-  documentChangeData.endTime = Date.now();
-
   websocket.send(
     JSON.stringify({
       event: "close",

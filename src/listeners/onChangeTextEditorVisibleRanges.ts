@@ -24,12 +24,11 @@ export function onChangeTextEditorVisibleRanges(
   }
 
   const documentChangeData = listener.getChangedFile(event.textEditor.document);
-  documentChangeData.endTime = now;
 
-  const data = JSON.stringify({
-    event: "scroll",
-    data: { fileInfo: documentChangeData, timestamp: now },
-  });
-
-  websocket.send(data);
+  websocket.send(
+    JSON.stringify({
+      event: "scroll",
+      data: { fileInfo: documentChangeData, timestamp: now },
+    })
+  );
 }

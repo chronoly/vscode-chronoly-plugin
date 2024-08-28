@@ -17,8 +17,6 @@ export function onDidChangeActiveTextEditor(
 
   const documentChangeData = listener.getChangedFile(event.document);
 
-  documentChangeData.endTime = Date.now();
-
   websocket.send(
     JSON.stringify({
       event: "changeFile",

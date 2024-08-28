@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import * as vscode from "vscode";
-import { contextProvider, httpClient, log } from "../extension";
+import { contextProvider, httpClient, log, websocket } from "../extension";
 
 export default class Auth {
   private context: vscode.ExtensionContext;
@@ -93,6 +93,7 @@ export default class Auth {
   public logout() {
     this.setApiKey("");
     this.validateApiKey();
+    websocket.close();
   }
 
   public async login() {
