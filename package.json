@@ -51,7 +51,7 @@
   },
   "scripts": {
     "clean": "rimraf ./dist ./out",
-    "package": "npm run clean && vsce package",
+    "package": "npm run clean && mkdir -p ./dist && vsce package --out ./dist",
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",

@@ -1,4 +1,4 @@
-name: Build Preview version
+name: Build Preview
 
 on:
   push:
@@ -11,20 +11,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.x
-          cache: "npm"
-          registry-url: "https://npm.pkg.github.com"
+          node-version-file: .nvmrc
+
       - run: npm --no-git-tag-version version 1.0.${{ github.run_number }}
-      - run: npm install @actions/languageserver@latest @actions/workflow-parser@latest @actions/expressions@latest @actions/languageservice@latest
       - run: npm ci
+      
       - name: create a package.json without scoped name
         run: |
           cp package.json package.json.real
           sed --regexp-extended '/"name"\s*:/ s#@[a-zA-Z\\-]+/##' package.json.real > package.json
+      
       - run: npm run package
-      - uses: actions/upload-artifact@v3
+      
+      - name: Prepare artifacts
+        id: prepare-artifacts
+        run: |
+          mkdir artifacts
+          cp dist/*.vsix artifacts
+          # Record the VSIX path as an output of this step.
+          # This will be used later when uploading a release asset.
+          VSIX_PATH="$(ls dist/*.vsix)"
+          echo "vsix_path=$VSIX_PATH" >> "$GITHUB_OUTPUT"
+          # Transform the GitHub ref so it can be used in a filename.
+          # The last sed invocation is used for testing branches that modify this workflow.
+          REF_NAME="$(echo ${{ github.ref }} | sed -e 's:^refs/tags/::' | sed -e 's:/:-:g')"
+          echo "ref_name=$REF_NAME" >> "$GITHUB_OUTPUT"
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          path: ./chronoly-1.0.${{ github.run_number }}.vsix 
+          name: vscode-chronoly-extension
+          path: artifacts
