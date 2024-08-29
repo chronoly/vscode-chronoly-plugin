@@ -1,5 +1,5 @@
 import { ExtensionContext } from "vscode";
-import { API_URL, DASHBOARD_URL, GATEWAY_URL } from "./constants";
+import { API_URL, GATEWAY_URL, URL } from "./constants";
 import { auth, resetHttpClient, websocket } from "./extension";
 
 export default class ContextProvider {
@@ -19,12 +19,12 @@ export default class ContextProvider {
     auth.validateApiKey();
   }
 
-  public dashboardUrl(): string {
-    return this.context.globalState.get("chronolyDashboardUrl", DASHBOARD_URL);
+  public url(): string {
+    return this.context.globalState.get("chronolyUrl", URL);
   }
 
-  public setDashboardUrl(url: string): void {
-    this.context.globalState.update("chronolyDashboardUrl", url);
+  public setUrl(url: string): void {
+    this.context.globalState.update("chronolyUrl", url);
   }
 
   public gatewayUrl(): string {

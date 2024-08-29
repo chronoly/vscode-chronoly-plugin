@@ -95,7 +95,7 @@ export default class StatusBarManager {
           this.enterApiKey(context);
           break;
         case "Open Dashboard":
-          env.openExternal(Uri.parse(contextProvider.dashboardUrl()));
+          env.openExternal(Uri.parse(`${contextProvider.url()}/dashboard`));
           break;
         case "Change Gateway Context":
           this.gatewayMenu(context);
@@ -118,17 +118,17 @@ export default class StatusBarManager {
     if (selectedItem) {
       switch (selectedItem.label) {
         case "Switch to Production Build (Prod)":
-          contextProvider.setDashboardUrl("https://chrono.ly/dashboard");
+          contextProvider.setUrl("https://chrono.ly/dashboard");
           contextProvider.setApiUrl("https://api.chrono.ly/api/");
           contextProvider.setGatewayUrl("wss://gateway.chrono.ly");
           break;
         case "Switch to Public Test Build (PTB)":
-          contextProvider.setDashboardUrl("http://localhost:3000/dashboard");
+          contextProvider.setUrl("http://localhost:3000/dashboard");
           contextProvider.setApiUrl("http://localhost:3001/api/");
           contextProvider.setGatewayUrl("wss://gateway.chrono.ly:8080");
           break;
         case "Switch to Development Build (Dev)":
-          contextProvider.setDashboardUrl("http://localhost:3000/dashboard");
+          contextProvider.setUrl("http://localhost:3000/dashboard");
           contextProvider.setApiUrl("http://localhost:3001/api/");
           contextProvider.setGatewayUrl("ws://localhost:8080");
           break;

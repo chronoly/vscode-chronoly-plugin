@@ -98,7 +98,7 @@ export default class Auth {
 
   public async login() {
     vscode.env.openExternal(
-      vscode.Uri.parse(`${contextProvider.dashboardUrl()}/vscode`)
+      vscode.Uri.parse(`${contextProvider.url()}/oauth/vscode`)
     );
   }
 }
