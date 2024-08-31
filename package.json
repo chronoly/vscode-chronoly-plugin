@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/chronoly/vscode-chronoly-plugin"
   },
-  "version": "1.0.10",
+  "version": "1.0.11",
   "publisher": "chronoly",
   "engines": {
     "vscode": "^1.80.0"
