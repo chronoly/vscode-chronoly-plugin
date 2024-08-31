@@ -133,6 +133,7 @@ export class WebSocketClient {
 
   public close() {
     this.websocket?.close();
+    this.websocket = undefined;
   }
 
   /**
