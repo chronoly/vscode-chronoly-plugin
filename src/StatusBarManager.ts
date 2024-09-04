@@ -1,7 +1,6 @@
 import {
   ExtensionContext,
   QuickPickItem,
-  QuickPickItemKind,
   StatusBarAlignment,
   StatusBarItem,
   Uri,
@@ -71,17 +70,6 @@ export default class StatusBarManager {
         label: "Log In (Manual Key)",
       });
     }
-
-    items.push(
-      {
-        label: "Types",
-        kind: QuickPickItemKind.Separator,
-      },
-      {
-        label: "Change Gateway Context",
-      }
-    );
-
     const selectedItem = await window.showQuickPick(items, {
       placeHolder: "Choose an item",
     });
@@ -96,41 +84,6 @@ export default class StatusBarManager {
           break;
         case "Open Dashboard":
           env.openExternal(Uri.parse(`${contextProvider.url()}/dashboard`));
-          break;
-        case "Change Gateway Context":
-          this.gatewayMenu(context);
-          break;
-      }
-    }
-  }
-
-  private async gatewayMenu(context: ExtensionContext) {
-    const items: QuickPickItem[] = [
-      { label: "Switch to Production Build (Prod)" },
-      { label: "Switch to Public Test Build (PTB)" },
-      { label: "Switch to Development Build (Dev)" },
-    ];
-
-    const selectedItem = await window.showQuickPick(items, {
-      placeHolder: "Choose an item",
-    });
-
-    if (selectedItem) {
-      switch (selectedItem.label) {
-        case "Switch to Production Build (Prod)":
-          contextProvider.setUrl("https://chrono.ly/dashboard");
-          contextProvider.setApiUrl("https://api.chrono.ly/api/");
-          contextProvider.setGatewayUrl("wss://gateway.chrono.ly");
-          break;
-        case "Switch to Public Test Build (PTB)":
-          contextProvider.setUrl("http://localhost:3000/dashboard");
-          contextProvider.setApiUrl("http://localhost:3001/api/");
-          contextProvider.setGatewayUrl("wss://gateway.chrono.ly:8080");
-          break;
-        case "Switch to Development Build (Dev)":
-          contextProvider.setUrl("http://localhost:3000/dashboard");
-          contextProvider.setApiUrl("http://localhost:3001/api/");
-          contextProvider.setGatewayUrl("ws://localhost:8080");
           break;
       }
     }
