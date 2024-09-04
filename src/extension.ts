@@ -25,7 +25,7 @@ export let httpClient: HttpClient;
 export let codelensProvider: CodelensProvider;
 
 export function activate(_context: ExtensionContext) {
-  contextProvider = new ContextProvider(_context);
+  contextProvider = new ContextProvider();
   httpClient = new HttpClient();
   auth = new Auth(_context);
   statusBarManager = new StatusBarManager(_context);
@@ -45,13 +45,20 @@ export function activate(_context: ExtensionContext) {
   _context.subscriptions.push(
     vscode.commands.registerCommand("chronoly.login", () => auth.login()),
     vscode.commands.registerCommand("chronoly.logout", () => auth.logout()),
-    vscode.commands.registerCommand("chronoly.setapikey", () => showApiKeyWindow()),
-    vscode.commands.registerCommand("chronoly.menu", () => statusBarManager.menu(_context)),
+    vscode.commands.registerCommand("chronoly.setapikey", () =>
+      showApiKeyWindow()
+    ),
+    vscode.commands.registerCommand("chronoly.menu", () =>
+      statusBarManager.menu(_context)
+    ),
     vscode.window.registerUriHandler({
       handleUri(uri: vscode.Uri): vscode.ProviderResult<void> {
         handleURI(uri);
-      }
-    })
+      },
+    }),
+    vscode.commands.registerCommand("chronoly.dashboard", () =>
+      vscode.env.openExternal(vscode.Uri.parse(`${contextProvider.url()}`))
+    )
   );
 
   codelensProvider = new CodelensProvider();
@@ -59,11 +66,15 @@ export function activate(_context: ExtensionContext) {
   vscode.languages.registerCodeLensProvider("*", codelensProvider);
 
   vscode.commands.registerCommand("chronoly.enableCodeLens", () => {
-    vscode.workspace.getConfiguration("chronoly").update("enableCodeLens", true, true);
+    vscode.workspace
+      .getConfiguration("chronoly")
+      .update("enableCodeLens", true, true);
   });
 
   vscode.commands.registerCommand("chronoly.disableCodeLens", () => {
-    vscode.workspace.getConfiguration("chronoly").update("enableCodeLens", false, true);
+    vscode.workspace
+      .getConfiguration("chronoly")
+      .update("enableCodeLens", false, true);
   });
 
   log(`Finished loading plugin.`);
