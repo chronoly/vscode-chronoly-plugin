@@ -1,3 +1,4 @@
+import * as vscode from "vscode";
 import * as WebSocket from "ws";
 import {
   auth,
@@ -34,7 +35,14 @@ export class WebSocketClient {
       this.websocket?.send(
         JSON.stringify({
           event: "identify",
-          data: { apiToken: auth.getApiKey() },
+          data: {
+            apiToken: auth.getApiKey(),
+            platform: "vscode",
+            platformVersion: vscode.version,
+            pluginVersion:
+              vscode.extensions.getExtension("chronoly.chronoly")?.packageJSON
+                .version,
+          },
         })
       );
     });
