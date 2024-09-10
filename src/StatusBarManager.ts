@@ -21,9 +21,14 @@ export default class StatusBarManager {
       this.refresh(context);
     }, 1000);
 
+    const keepAliveInterval = setInterval(() => {
+      this.sendKeepAlive();
+    }, 30_000);
+
     context.subscriptions.push({
       dispose: () => {
         clearInterval(refreshInterval);
+        clearInterval(keepAliveInterval);
       },
     });
   }
@@ -41,6 +46,16 @@ export default class StatusBarManager {
               timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             },
           },
+        })
+      );
+    }
+  };
+
+  public sendKeepAlive = () => {
+    if (websocket?.isConnected()) {
+      websocket.send(
+        JSON.stringify({
+          event: "keepalive",
         })
       );
     }
