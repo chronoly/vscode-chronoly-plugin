@@ -98,7 +98,7 @@ export default class StatusBarManager {
           this.enterApiKey(context);
           break;
         case "Open Dashboard":
-          env.openExternal(Uri.parse(`${contextProvider.url()}/dashboard`));
+          env.openExternal(Uri.parse(`${contextProvider.url()}`));
           break;
       }
     }
